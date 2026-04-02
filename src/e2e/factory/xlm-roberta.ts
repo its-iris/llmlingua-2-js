@@ -10,7 +10,7 @@ const modelName = "atjsh/llmlingua-2-js-xlm-roberta-large-meetingbank";
 const oai_tokenizer = new Tiktoken(o200k_base);
 
 const { promptCompressor } = await LLMLingua2.WithXLMRoBERTa(modelName, {
-  transformerJSConfig: {
+  transformersJSConfig: {
     device: "auto",
     dtype: "fp32",
   },

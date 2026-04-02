@@ -10,7 +10,7 @@ const modelName = "Arcoldd/llmlingua4j-bert-base-onnx";
 const oai_tokenizer = new Tiktoken(o200k_base);
 
 const { promptCompressor } = await LLMLingua2.WithBERTMultilingual(modelName, {
-  transformerJSConfig: {
+  transformersJSConfig: {
     device: "auto",
     dtype: "fp32",
   },

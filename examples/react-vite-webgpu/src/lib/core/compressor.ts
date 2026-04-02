@@ -159,7 +159,7 @@ async function LLMLingua2CompressorFactory(options: {
 
   if (model.factory) {
     const { promptCompressor } = await model.factory(model.modelName, {
-      transformerJSConfig: transformersJSConfig,
+      transformersJSConfig: transformersJSConfig,
       oaiTokenizer,
       modelSpecificOptions: model.pretrainedModelOptions,
     });

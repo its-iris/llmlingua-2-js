@@ -35,7 +35,7 @@ type PretrainedModelOptions = Parameters<
 
 async function prepareDependencies(
   modelName: string,
-  transformerJSConfig: TransformersJSConfig,
+  transformersJSConfig: TransformersJSConfig,
   logger: Logger,
 
   pretrainedConfig?: PretrainedConfig | null,
@@ -49,8 +49,8 @@ async function prepareDependencies(
   const tokenizerConfig = {
     config: {
       ...config,
-      ...(transformerJSConfig
-        ? { "transformers.js_config": transformerJSConfig }
+      ...(transformersJSConfig
+        ? { "transformers.js_config": transformersJSConfig }
         : {}),
     },
     ...pretrainedTokenizerOptions,
@@ -66,8 +66,8 @@ async function prepareDependencies(
   const modelConfig = {
     config: {
       ...config,
-      ...(transformerJSConfig
-        ? { "transformers.js_config": transformerJSConfig }
+      ...(transformersJSConfig
+        ? { "transformers.js_config": transformersJSConfig }
         : {}),
     },
     ...modelSpecificOptions,
@@ -92,7 +92,7 @@ export interface LLMLingua2FactoryOptions {
   /**
    * Configuration for Transformers.js.
    */
-  transformerJSConfig: TransformersJSConfig;
+  transformersJSConfig: TransformersJSConfig;
 
   /**
    * The tokenizer to use calculating the compression rate.
@@ -167,7 +167,7 @@ const oai_tokenizer = await AutoTokenizer.from_pretrained("Xenova/gpt-4o");
 
 const { promptCompressor } = await LLMLingua2.WithXLMRoBERTa(modelName,
   {
-    transformerJSConfig: {
+    transformersJSConfig: {
       device: "auto",
       dtype: "fp32",
     },
@@ -191,7 +191,7 @@ export async function WithXLMRoBERTa(
   options: LLMLingua2FactoryOptions
 ): Promise<LLMLingua2FactoryReturn> {
   const {
-    transformerJSConfig,
+    transformersJSConfig,
     oaiTokenizer,
     pretrainedConfig,
     pretrainedTokenizerOptions,
@@ -201,7 +201,7 @@ export async function WithXLMRoBERTa(
 
   const { model, tokenizer, config } = await prepareDependencies(
     modelName,
-    transformerJSConfig,
+    transformersJSConfig,
     logger,
     pretrainedConfig,
     pretrainedTokenizerOptions,
@@ -243,7 +243,7 @@ const oai_tokenizer = await AutoTokenizer.from_pretrained("Xenova/gpt-4o");
 
 const { promptCompressor } = await LLMLingua2.WithBERTMultilingual(modelName,
   {
-    transformerJSConfig: {
+    transformersJSConfig: {
       device: "auto",
       dtype: "fp32",
     },
@@ -267,7 +267,7 @@ export async function WithBERTMultilingual(
   options: LLMLingua2FactoryOptions
 ): Promise<LLMLingua2FactoryReturn> {
   const {
-    transformerJSConfig,
+    transformersJSConfig,
     oaiTokenizer,
     pretrainedConfig,
     pretrainedTokenizerOptions,
@@ -277,7 +277,7 @@ export async function WithBERTMultilingual(
 
   const { model, tokenizer, config } = await prepareDependencies(
     modelName,
-    transformerJSConfig,
+    transformersJSConfig,
     logger,
     pretrainedConfig,
     pretrainedTokenizerOptions,
