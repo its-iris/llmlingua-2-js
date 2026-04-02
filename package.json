@@ -56,8 +56,6 @@
     "huggingface",
     "hf",
     "transformers",
-    "tensorflow",
-    "tfjs",
     "webgpu",
     "webassembly",
     "onnx",
