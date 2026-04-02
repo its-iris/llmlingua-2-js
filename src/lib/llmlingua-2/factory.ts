@@ -151,7 +151,7 @@ export interface LLMLingua2FactoryReturn {
  * 
  * @example 
  * ```ts
-import { LLMLingua2 } from "@atjsh/llmlingua-2";
+import { LLMLingua2 } from "@its-iris/llmlingua-2";
 
 import { AutoTokenizer } from "@huggingface/transformers";
 
@@ -213,7 +213,7 @@ export async function WithXLMRoBERTa(
  * 
  * @example 
  * ```ts
-import { LLMLingua2 } from "@atjsh/llmlingua-2";
+import { LLMLingua2 } from "@its-iris/llmlingua-2";
 
 import { AutoTokenizer } from "@huggingface/transformers";
 

@@ -5,20 +5,6 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
-"@atjsh/llmlingua-2@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "@atjsh/llmlingua-2@workspace:."
-  dependencies:
-    "@huggingface/transformers": "npm:^4.0.0"
-    "@types/node": "npm:^22.15.18"
-    rimraf: "npm:^6.1.3"
-    typedoc: "npm:^0.28.18"
-    typescript: "npm:^6.0.2"
-  peerDependencies:
-    "@huggingface/transformers": ^4.0.0
-  languageName: unknown
-  linkType: soft
-
 "@emnapi/runtime@npm:^1.7.0":
   version: 1.9.2
   resolution: "@emnapi/runtime@npm:1.9.2"
@@ -294,6 +280,20 @@ __metadata:
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
+
+"@its-iris/llmlingua-2@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@its-iris/llmlingua-2@workspace:."
+  dependencies:
+    "@huggingface/transformers": "npm:^4.0.0"
+    "@types/node": "npm:^22.15.18"
+    rimraf: "npm:^6.1.3"
+    typedoc: "npm:^0.28.18"
+    typescript: "npm:^6.0.2"
+  peerDependencies:
+    "@huggingface/transformers": ^4.0.0
+  languageName: unknown
+  linkType: soft
 
 "@protobufjs/aspromise@npm:^1.1.1, @protobufjs/aspromise@npm:^1.1.2":
   version: 1.1.2

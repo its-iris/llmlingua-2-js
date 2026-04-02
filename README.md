@@ -36,18 +36,12 @@ Especially, the `@huggingface/transformers` library utilizes various computation
 
 ## Installation
 
-You can use the library by downloading the library from [npm](https://www.npmjs.com/package/@atjsh/llmlingua-2) and importing it into your JavaScript/TypeScript project.
+You can use the library by installing it via a package manager using the GitHub repository link.
 
-First, install the dependencies:
-
-```sh
-npm install @huggingface/transformers^4.0.0
-```
-
-Then, install the library:
+Install the dependencies and the library:
 
 ```sh
-npm install @atjsh/llmlingua-2
+npm install @huggingface/transformers^4.0.0 git://github.com/its-iris/llmlingua-2-js.git
 ```
 
 ## Model Selection
