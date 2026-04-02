@@ -31,7 +31,6 @@ yarn install
 This implementation depends on the following libraries:
 
 - [**@huggingface/transformers**](https://github.com/huggingface/transformers.js)
-- [**js-tiktoken**](https://www.npmjs.com/package/js-tiktoken)
 
 Especially, the `@huggingface/transformers` library utilizes various computational optimizations to achieve high performance. Please consult if the running environment supports the minimum requirements from these libraries.
 
@@ -42,7 +41,7 @@ You can use the library by downloading the library from [npm](https://www.npmjs.
 First, install the dependencies:
 
 ```sh
-npm install @huggingface/transformers js-tiktoken
+npm install @huggingface/transformers^4.0.0
 ```
 
 Then, install the library:
