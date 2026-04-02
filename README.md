@@ -69,7 +69,6 @@ For more details on how to use the library, please refer to the [API reference d
 
 E2E tests are partially available in following directories:
 
-- `src/e2e`
 - `examples/**`
 
 # License

@@ -11,13 +11,12 @@
   "type": "module",
   "scripts": {
     "clean": "rimraf dist",
-    "build": "tsc",
+    "build": "pnpm clean && tsc",
     "prepare": "pnpm build",
-    "preversion": "pnpm clean && pnpm build"
+    "preversion": "pnpm build"
   },
   "files": [
-    "dist",
-    "!dist/e2e"
+    "dist"
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
