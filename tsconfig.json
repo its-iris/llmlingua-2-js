@@ -6,7 +6,6 @@
     "module": "Node18",
     "rootDir": "./src",
     "moduleResolution": "node16",
-    "baseUrl": "./",
     "sourceMap": true,
     "outDir": "./dist",
     "esModuleInterop": true,
