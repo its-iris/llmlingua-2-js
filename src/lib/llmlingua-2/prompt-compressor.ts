@@ -12,7 +12,6 @@ import {
   TokenClassifierOutput,
   softmax,
 } from "@huggingface/transformers";
-import { chunk } from "es-toolkit/array";
 
 import {
   GetPureTokenFunction,
@@ -20,6 +19,7 @@ import {
   Logger,
   percentile,
   replace_added_token,
+  chunk
 } from "./utils.js";
 
 /**

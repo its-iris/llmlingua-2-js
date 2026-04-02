@@ -9,15 +9,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@atjsh/llmlingua-2@workspace:."
   dependencies:
-    "@huggingface/transformers": "npm:^3.5.2"
+    "@huggingface/transformers": "npm:^3.5.1"
     "@types/node": "npm:^22.15.18"
-    es-toolkit: "npm:^1.38.0"
     js-tiktoken: "npm:^1.0.21"
     rimraf: "npm:^6.1.3"
     typedoc: "npm:^0.28.18"
     typescript: "npm:^6.0.2"
   peerDependencies:
-    "@huggingface/transformers": "*"
+    "@huggingface/transformers": ^3.5.1
   languageName: unknown
   linkType: soft
 
@@ -50,7 +49,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@huggingface/transformers@npm:^3.5.2":
+"@huggingface/transformers@npm:^3.5.1":
   version: 3.8.1
   resolution: "@huggingface/transformers@npm:3.8.1"
   dependencies:
@@ -539,18 +538,6 @@ __metadata:
   version: 1.3.0
   resolution: "es-errors@npm:1.3.0"
   checksum: 10c0/0a61325670072f98d8ae3b914edab3559b6caa980f08054a3b872052640d91da01d38df55df797fcc916389d77fc92b8d5906cf028f4db46d7e3003abecbca85
-  languageName: node
-  linkType: hard
-
-"es-toolkit@npm:^1.38.0":
-  version: 1.45.1
-  resolution: "es-toolkit@npm:1.45.1"
-  dependenciesMeta:
-    "@trivago/prettier-plugin-sort-imports@4.3.0":
-      unplugged: true
-    prettier-plugin-sort-re-exports@0.0.1:
-      unplugged: true
-  checksum: 10c0/b19180c778af8fe2fb450e8e05a5793166c91e0aa66b87d9fcfcc5618bd33e6ceec9c103e074458d32b2044972dc4fc63631b3b615834fde261917e9561f6f59
   languageName: node
   linkType: hard
 

@@ -32,7 +32,7 @@ export type GetPureTokenFunction = (token: string | null | undefined) => string;
  * @category Adaptors
  */
 export const get_pure_tokens_xlm_roberta_large: GetPureTokenFunction = (
-  token
+  token,
 ) => {
   return token ? token.replace(/^▁/, "") : "";
 };
@@ -56,7 +56,7 @@ export const get_pure_tokens_bert_base_multilingual_cased: GetPureTokenFunction 
 export type IsBeginOfNewWordFunction = (
   token: string | null | undefined,
   force_tokens?: string[],
-  token_map?: Record<string, string>
+  token_map?: Record<string, string>,
 ) => boolean;
 
 /**
@@ -101,7 +101,7 @@ export const is_begin_of_new_word_bert_base_multilingual_cased: IsBeginOfNewWord
  */
 export function replace_added_token(
   token: string,
-  token_map: Record<string, string>
+  token_map: Record<string, string>,
 ) {
   let t = token;
   for (const [ori, added] of Object.entries(token_map)) {
@@ -152,4 +152,32 @@ export function percentile(arr: number[], p: number): number {
   const d0 = sortedArr[f] * (c - k);
   const d1 = sortedArr[c] * (k - f);
   return d0 + d1;
+}
+
+/**
+ * Splits an array into smaller chunks of a specified size.
+ *
+ * @param {T[]} arr - The array to chunk.
+ * @param {number} size - The size of each chunk. Must be a positive integer.
+ * @returns {T[][]} A new array containing the chunks.
+ *
+ * @throws {Error} If `size` is not an integer greater than zero.
+ *
+ * @example
+ * chunk([1, 2, 3, 4, 5], 2); // → [[1, 2], [3, 4], [5]]
+ * 
+ * @category Utils
+ */
+export function chunk<T>(arr: T[], size: number): T[][] {
+  if (!Number.isInteger(size) || size <= 0) {
+    throw new Error("Size must be an integer greater than zero.");
+  }
+  const chunkLength: number = Math.ceil(arr.length / size);
+  const result: T[][] = Array(chunkLength);
+  for (let index: number = 0; index < chunkLength; index++) {
+    const start: number = index * size;
+    const end: number = start + size;
+    result[index] = arr.slice(start, end);
+  }
+  return result;
 }
