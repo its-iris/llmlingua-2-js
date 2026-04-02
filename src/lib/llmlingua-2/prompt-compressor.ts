@@ -13,7 +13,6 @@ import {
   softmax,
 } from "@huggingface/transformers";
 import { chunk } from "es-toolkit/array";
-import { Tiktoken } from "js-tiktoken/lite";
 
 import {
   GetPureTokenFunction,
@@ -194,7 +193,7 @@ export class PromptCompressorLLMLingua2 {
     /**
      * The tokenizer to use calculating the compression rate.
      */
-    private readonly oaiTokenizer: Tiktoken,
+    private readonly oaiTokenizer: { encode: (text: string) => any[] },
 
     /**
      * Configuration for LLMLingua2.

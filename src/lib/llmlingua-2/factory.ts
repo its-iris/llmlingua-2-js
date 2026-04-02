@@ -14,7 +14,6 @@ import {
   PretrainedConfig,
   TransformersJSConfig,
 } from "@huggingface/transformers";
-import { Tiktoken } from "js-tiktoken";
 
 import { PromptCompressorLLMLingua2 } from "./prompt-compressor.js";
 import {
@@ -96,7 +95,7 @@ export interface LLMLingua2FactoryOptions {
   /**
    * The tokenizer to use calculating the compression rate.
    */
-  oaiTokenizer: Tiktoken;
+  oaiTokenizer: { encode: (text: string) => any[] };
 
   /**
    * Optional pretrained configuration.

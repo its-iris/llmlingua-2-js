@@ -35,8 +35,7 @@
     "typescript": "^5.8.3"
   },
   "peerDependencies": {
-    "@huggingface/transformers": "*",
-    "js-tiktoken": "*"
+    "@huggingface/transformers": "*"
   },
   "keywords": [
     "llmlingua",
