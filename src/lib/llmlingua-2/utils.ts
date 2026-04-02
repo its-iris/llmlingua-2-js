@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: MIT
 
+import { PreTrainedTokenizer } from "@huggingface/transformers";
+
 /**
  * @categoryDescription Adaptors
  * A collection of utility functions and types for model-specific token handling.
@@ -165,7 +167,7 @@ export function percentile(arr: number[], p: number): number {
  *
  * @example
  * chunk([1, 2, 3, 4, 5], 2); // → [[1, 2], [3, 4], [5]]
- * 
+ *
  * @category Utils
  */
 export function chunk<T>(arr: T[], size: number): T[][] {
@@ -180,4 +182,39 @@ export function chunk<T>(arr: T[], size: number): T[][] {
     result[index] = arr.slice(start, end);
   }
   return result;
+}
+
+/**
+ * Decodes a list of tokens.
+ * Reimplementation of https://github.com/huggingface/transformers.js/blob/7a58d6e11968dd85dc87ce37b2ab37213165889a/src/tokenizers.js#L1898
+ * This function was moved to the Tokenizers API with Transformers 4.x
+ *
+ * @param tokens The list of tokens.
+ * @returns The decoded string.
+ *
+ * @category Utils
+ */
+export function decode_tokens(
+  tokenizer: PreTrainedTokenizer,
+  tokens: string[],
+): string {
+  return tokenizer._tokenizer.decoder.decode(tokens);
+}
+
+/**
+ * Converts a list of token IDs into a list of tokens.
+ * Reimplementation of https://github.com/huggingface/transformers.js/blob/7a58d6e11968dd85dc87ce37b2ab37213165889a/src/tokenizers.js#L423
+ * This function was removed with Transformers 4.x
+ *
+ * @param tokenizer The PreTrainedTokenizer instance
+ * @param ids The token IDs to convert.
+ * @returns The converted tokens.
+ *
+ * @category Utils
+ */
+export function convert_ids_to_tokens(
+  tokenizer: PreTrainedTokenizer,
+  ids: number[] | bigint[],
+): string[] {
+  return ids.map((id) => tokenizer._tokenizer.id_to_token(Number(id)));
 }

@@ -9,7 +9,6 @@ import {
   PreTrainedModel,
   PreTrainedTokenizer,
   Tensor,
-  TokenClassifierOutput,
   softmax,
 } from "@huggingface/transformers";
 
@@ -19,7 +18,9 @@ import {
   Logger,
   percentile,
   replace_added_token,
-  chunk
+  chunk,
+  decode_tokens,
+  convert_ids_to_tokens
 } from "./utils.js";
 
 /**
@@ -227,7 +228,7 @@ export class PromptCompressorLLMLingua2 {
       this.addedTokens.push(`[NEW${i}]`);
     }
 
-    const specialTokensMap = this.tokenizer.special_tokens || {};
+    const specialTokensMap = this.tokenizer.all_special_tokens || {};
 
     this.specialTokens = new Set<string>();
 
@@ -372,7 +373,8 @@ export class PromptCompressorLLMLingua2 {
 
     while (st < n) {
       if (st + maxLenTokens > n - 1) {
-        const chunk = this.tokenizer.decoder.decode(
+        const chunk = decode_tokens(
+          this.tokenizer,
           origin_tokens.slice(st, n - 1)
         );
         origin_list.push(chunk);
@@ -387,7 +389,8 @@ export class PromptCompressorLLMLingua2 {
           }
         }
 
-        const chunk = this.tokenizer.decoder.decode(
+        const chunk = decode_tokens(
+          this.tokenizer,
           origin_tokens.slice(st, ed + 1)
         );
 
@@ -528,7 +531,7 @@ export class PromptCompressorLLMLingua2 {
 
       this.logger("input tokenization finished");
 
-      const outputs: TokenClassifierOutput = await this.model({
+      const outputs = await this.model({
         input_ids,
         attention_mask,
       });
@@ -565,7 +568,7 @@ export class PromptCompressorLLMLingua2 {
           continue;
         }
 
-        const token_list = this.tokenizer.model.convert_ids_to_tokens(
+        const token_list = convert_ids_to_tokens(this.tokenizer,
           new Tensor("int64", active_ids, [active_ids.length]).tolist()
         );
 
@@ -611,7 +614,7 @@ export class PromptCompressorLLMLingua2 {
         }
 
         const keep_str = replace_added_token(
-          this.tokenizer.decoder.decode(keep_words),
+          decode_tokens(this.tokenizer, keep_words),
           token_map
         );
 
