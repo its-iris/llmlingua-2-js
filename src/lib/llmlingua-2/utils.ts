@@ -22,7 +22,8 @@ export type Logger = (...message: unknown[]) => void;
  *
  * @category Utils
  */
-export const DEFAULT_LOGGER = console.log;
+export const DEFAULT_LOGGER = (...message: unknown[]) =>
+  console.log("[llmlingua-2-js]", ...message);
 
 // Equivalent to Python's string.punctuation
 const PUNCTUATION: string = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";

@@ -20,7 +20,8 @@ import {
   replace_added_token,
   chunk,
   decode_tokens,
-  convert_ids_to_tokens
+  convert_ids_to_tokens,
+  DEFAULT_LOGGER
 } from "./utils.js";
 
 /**
@@ -223,7 +224,7 @@ export class PromptCompressorLLMLingua2 {
     /**
      * Logger function to log messages.
      */
-    private readonly logger: Logger = console.log
+    private readonly logger: Logger = DEFAULT_LOGGER
   ) {
     for (let i = 0; i < this.llmlingua2Config.max_force_token; i++) {
       this.addedTokens.push(`[NEW${i}]`);
