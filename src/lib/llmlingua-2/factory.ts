@@ -11,9 +11,11 @@ import {
   AutoConfig,
   AutoModelForTokenClassification,
   AutoTokenizer,
-  PretrainedConfig,
-  TransformersJSConfig,
+  PretrainedConfig
 } from "@huggingface/transformers";
+
+// This is no longer exposed directly after Transformers 4.x
+type TransformersJSConfig = NonNullable<PretrainedConfig['transformers.js_config']>;
 
 import { PromptCompressorLLMLingua2 } from "./prompt-compressor.js";
 import {
@@ -158,11 +160,10 @@ export interface LLMLingua2FactoryReturn {
  * ```ts
 import { LLMLingua2 } from "@atjsh/llmlingua-2";
 
-import { Tiktoken } from "js-tiktoken/lite";
-import o200k_base from "js-tiktoken/ranks/o200k_base";
+import { AutoTokenizer } from "@huggingface/transformers";
 
 const modelName = "atjsh/llmlingua-2-js-xlm-roberta-large-meetingbank";
-const oai_tokenizer = new Tiktoken(o200k_base);
+const oai_tokenizer = await AutoTokenizer.from_pretrained("Xenova/gpt-4o");
 
 const { promptCompressor } = await LLMLingua2.WithXLMRoBERTa(modelName,
   {
@@ -235,11 +236,10 @@ export async function WithXLMRoBERTa(
  * ```ts
 import { LLMLingua2 } from "@atjsh/llmlingua-2";
 
-import { Tiktoken } from "js-tiktoken/lite";
-import o200k_base from "js-tiktoken/ranks/o200k_base";
+import { AutoTokenizer } from "@huggingface/transformers";
 
 const modelName = "Arcoldd/llmlingua4j-bert-base-onnx";
-const oai_tokenizer = new Tiktoken(o200k_base);
+const oai_tokenizer = await AutoTokenizer.from_pretrained("Xenova/gpt-4o");
 
 const { promptCompressor } = await LLMLingua2.WithBERTMultilingual(modelName,
   {
