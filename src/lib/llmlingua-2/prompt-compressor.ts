@@ -193,8 +193,9 @@ export class PromptCompressorLLMLingua2 {
 
     /**
      * The tokenizer to use calculating the compression rate.
+     * It needs to return a collection that exposes length.
      */
-    private readonly oaiTokenizer: { encode: (text: string) => any[] },
+    private readonly oaiTokenizer: { encode: (text: string) => { length: number } },
 
     /**
      * Configuration for LLMLingua2.

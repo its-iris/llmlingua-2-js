@@ -94,8 +94,9 @@ export interface LLMLingua2FactoryOptions {
 
   /**
    * The tokenizer to use calculating the compression rate.
+   * It needs to return a collection that exposes length.
    */
-  oaiTokenizer: { encode: (text: string) => any[] };
+  oaiTokenizer: { encode: (text: string) => { length: number } },
 
   /**
    * Optional pretrained configuration.
