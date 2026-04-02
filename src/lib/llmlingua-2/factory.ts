@@ -11,12 +11,8 @@ import {
   AutoConfig,
   AutoModelForTokenClassification,
   AutoTokenizer,
-  PretrainedConfig
+  PretrainedConfig,
 } from "@huggingface/transformers";
-
-// This is no longer exposed directly after Transformers 4.x
-type TransformersJSConfig = NonNullable<PretrainedConfig['transformers.js_config']>;
-
 import { PromptCompressorLLMLingua2 } from "./prompt-compressor.js";
 import {
   get_pure_tokens_bert_base_multilingual_cased,
@@ -24,8 +20,13 @@ import {
   is_begin_of_new_word_bert_base_multilingual_cased,
   is_begin_of_new_word_xlm_roberta_large,
   Logger,
+  DEFAULT_LOGGER
 } from "./utils.js";
 
+// The types below are not directly exposed by Transformers API
+type TransformersJSConfig = NonNullable<
+  PretrainedConfig["transformers.js_config"]
+>;
 type PreTrainedTokenizerOptions = Parameters<
   typeof AutoTokenizer.from_pretrained
 >[1];
@@ -33,54 +34,55 @@ type PretrainedModelOptions = Parameters<
   typeof AutoModelForTokenClassification.from_pretrained
 >[1];
 
+/**
+ * Builds the options objects for the model and the tokenizer, and loads them both.
+ *
+ * @category Factory
+ */
 async function prepareDependencies(
   modelName: string,
-  transformersJSConfig: TransformersJSConfig,
-  logger: Logger,
-
-  pretrainedConfig?: PretrainedConfig | null,
-  pretrainedTokenizerOptions?: PreTrainedTokenizerOptions | null,
-  modelSpecificOptions?: PretrainedModelOptions | null
+  options: LLMLingua2FactoryOptions,
 ) {
-  const config =
-    pretrainedConfig ?? (await AutoConfig.from_pretrained(modelName));
-  logger({ config });
+  const {
+    transformersJSConfig,
+    tokenizerOptions,
+    modelOptions,
+    logger = DEFAULT_LOGGER,
+  } = options;
+  const defaultConfig = await AutoConfig.from_pretrained(modelName);
 
-  const tokenizerConfig = {
+  // Override defaultConfig if user provided a config for tokenizer or model
+  // Always override transformers.js_config with transformersJSConfig
+  const buildOpts = (opts?: any) => ({
+    ...opts,
     config: {
-      ...config,
-      ...(transformersJSConfig
-        ? { "transformers.js_config": transformersJSConfig }
-        : {}),
+      ...(opts?.config || defaultConfig),
+      ...(transformersJSConfig && {
+        "transformers.js_config": transformersJSConfig,
+      }),
     },
-    ...pretrainedTokenizerOptions,
-  };
-  logger({ tokenizerConfig });
+  });
 
-  const tokenizer = await AutoTokenizer.from_pretrained(
-    modelName,
-    tokenizerConfig
-  );
-  logger({ tokenizer });
+  // Build the option objects
+  const finalTokenizerOptions = buildOpts(tokenizerOptions);
+  const finalModelOptions = buildOpts(modelOptions);
+  logger({
+    defaultConfig: defaultConfig,
+    tokenizerConfig: finalTokenizerOptions.config,
+    modelConfig: finalModelOptions.config,
+  });
 
-  const modelConfig = {
-    config: {
-      ...config,
-      ...(transformersJSConfig
-        ? { "transformers.js_config": transformersJSConfig }
-        : {}),
-    },
-    ...modelSpecificOptions,
-  };
-  logger({ modelConfig });
+  // Load the models asynchronously
+  const [tokenizer, model] = await Promise.all([
+    AutoTokenizer.from_pretrained(modelName, finalTokenizerOptions),
+    AutoModelForTokenClassification.from_pretrained(
+      modelName,
+      finalModelOptions,
+    ),
+  ]);
+  logger({ tokenizer, model });
 
-  const model = await AutoModelForTokenClassification.from_pretrained(
-    modelName,
-    modelConfig
-  );
-  logger({ model });
-
-  return { model, tokenizer, config };
+  return { model, tokenizer };
 }
 
 /**
@@ -98,22 +100,18 @@ export interface LLMLingua2FactoryOptions {
    * The tokenizer to use calculating the compression rate.
    * It needs to return a collection that exposes length.
    */
-  oaiTokenizer: { encode: (text: string) => { length: number } },
-
-  /**
-   * Optional pretrained configuration.
-   */
-  pretrainedConfig?: PretrainedConfig | null;
+  oaiTokenizer: { encode: (text: string) => { length: number } };
 
   /**
    * Optional pretrained tokenizer options.
+   * This does not refer to the oaiTokenizer!
    */
-  pretrainedTokenizerOptions?: PreTrainedTokenizerOptions | null;
+  tokenizerOptions?: PreTrainedTokenizerOptions | null;
 
   /**
    * Optional model-specific options.
    */
-  modelSpecificOptions?: PretrainedModelOptions | null;
+  modelOptions?: PretrainedModelOptions | null;
 
   /**
    * Optional logger function.
@@ -143,11 +141,6 @@ export interface LLMLingua2FactoryReturn {
    * The tokenizer used for tokenization.
    */
   tokenizer: AutoTokenizer;
-
-  /**
-   * The configuration used for the model.
-   */
-  config: AutoConfig;
 }
 
 /**
@@ -172,7 +165,7 @@ const { promptCompressor } = await LLMLingua2.WithXLMRoBERTa(modelName,
       dtype: "fp32",
     },
     oaiTokenizer: oai_tokenizer,
-    modelSpecificOptions: {
+    modelOptions: {
       use_external_data_format: true,
     },
   }
@@ -188,41 +181,25 @@ console.log({ compressedText });
  */
 export async function WithXLMRoBERTa(
   modelName: string,
-  options: LLMLingua2FactoryOptions
+  options: LLMLingua2FactoryOptions,
 ): Promise<LLMLingua2FactoryReturn> {
-  const {
-    transformersJSConfig,
-    oaiTokenizer,
-    pretrainedConfig,
-    pretrainedTokenizerOptions,
-    modelSpecificOptions,
-    logger = console.log,
-  } = options;
+  const { oaiTokenizer, logger = DEFAULT_LOGGER } = options;
 
-  const { model, tokenizer, config } = await prepareDependencies(
-    modelName,
-    transformersJSConfig,
-    logger,
-    pretrainedConfig,
-    pretrainedTokenizerOptions,
-    modelSpecificOptions
-  );
+  const { model, tokenizer } = await prepareDependencies(modelName, options);
 
   const promptCompressor = new PromptCompressorLLMLingua2(
     model,
     tokenizer,
     get_pure_tokens_xlm_roberta_large,
     is_begin_of_new_word_xlm_roberta_large,
-    oaiTokenizer
+    oaiTokenizer,
   );
-
   logger({ promptCompressor });
 
   return {
     promptCompressor,
     model,
     tokenizer,
-    config,
   };
 }
 
@@ -248,7 +225,7 @@ const { promptCompressor } = await LLMLingua2.WithBERTMultilingual(modelName,
       dtype: "fp32",
     },
     oaiTokenizer: oai_tokenizer,
-    modelSpecificOptions: {
+    modelOptions: {
       subfolder: "",
     },
   }
@@ -264,40 +241,24 @@ console.log({ compressedText });
  */
 export async function WithBERTMultilingual(
   modelName: string,
-  options: LLMLingua2FactoryOptions
+  options: LLMLingua2FactoryOptions,
 ): Promise<LLMLingua2FactoryReturn> {
-  const {
-    transformersJSConfig,
-    oaiTokenizer,
-    pretrainedConfig,
-    pretrainedTokenizerOptions,
-    modelSpecificOptions,
-    logger = console.log,
-  } = options;
+  const { oaiTokenizer, logger = DEFAULT_LOGGER } = options;
 
-  const { model, tokenizer, config } = await prepareDependencies(
-    modelName,
-    transformersJSConfig,
-    logger,
-    pretrainedConfig,
-    pretrainedTokenizerOptions,
-    modelSpecificOptions
-  );
+  const { model, tokenizer } = await prepareDependencies(modelName, options);
 
   const promptCompressor = new PromptCompressorLLMLingua2(
     model,
     tokenizer,
     get_pure_tokens_bert_base_multilingual_cased,
     is_begin_of_new_word_bert_base_multilingual_cased,
-    oaiTokenizer
+    oaiTokenizer,
   );
-
   logger({ promptCompressor });
 
   return {
     promptCompressor,
     model,
     tokenizer,
-    config,
   };
 }

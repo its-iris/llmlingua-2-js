@@ -17,6 +17,13 @@ import { PreTrainedTokenizer } from "@huggingface/transformers";
  */
 export type Logger = (...message: unknown[]) => void;
 
+/**
+ * Default logger function to be used.
+ *
+ * @category Utils
+ */
+export const DEFAULT_LOGGER = console.log;
+
 // Equivalent to Python's string.punctuation
 const PUNCTUATION: string = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 

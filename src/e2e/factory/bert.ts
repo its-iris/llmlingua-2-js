@@ -15,7 +15,7 @@ const { promptCompressor } = await LLMLingua2.WithBERTMultilingual(modelName, {
     dtype: "fp32",
   },
   oaiTokenizer: oai_tokenizer,
-  modelSpecificOptions: {
+  modelOptions: {
     subfolder: "",
   },
 });

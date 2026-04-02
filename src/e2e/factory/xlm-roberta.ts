@@ -15,7 +15,7 @@ const { promptCompressor } = await LLMLingua2.WithXLMRoBERTa(modelName, {
     dtype: "fp32",
   },
   oaiTokenizer: oai_tokenizer,
-  modelSpecificOptions: {
+  modelOptions: {
     use_external_data_format: true,
   },
 });
