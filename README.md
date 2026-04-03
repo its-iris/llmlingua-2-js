@@ -13,30 +13,17 @@
 - **Performance**: Everything can be done in the browser. If your environment supports WebGPU, you can use it. Server-side processing is not required by default.
 - **Correctness**: The original logic will be ported to TypeScript as accurately as possible.
 
-# Try Demo Online (No Installation Required)
+# Examples & Demo
 
-[You can try it on the GitHub Pages](https://atjsh.github.io/llmlingua-2-js) without any installation.
+[You can try it on the GitHub Pages](https://its-iris.github.io/llmlingua-2-js) without any installation.
 
-The source code for demo is available in the `examples` directory. You can run it locally using the following command:
-
-```sh
-cd examples/react-vite-webgpu
-pnpm install
-```
-
-[Learn More: Demo source code](/examples/react-vite-webgpu/README.md)
+The source code for the demo is available in the `examples` directory.
 
 # Getting Started
 
-This implementation depends on the following libraries:
-
-- [**@huggingface/transformers**](https://github.com/huggingface/transformers.js)
-
-Especially, the `@huggingface/transformers` library utilizes various computational optimizations to achieve high performance. Please consult if the running environment supports the minimum requirements from these libraries.
+This implementation depends on [**@huggingface/transformers**](https://github.com/huggingface/transformers.js). Please check their requirements to see if your environment supports inference.
 
 ## Installation
-
-You can use the library by installing it via a package manager using the GitHub repository link.
 
 Install the dependencies and the library:
 
@@ -48,28 +35,18 @@ npm install @huggingface/transformers@4.0 git://github.com/its-iris/llmlingua-2-
 
 You can choose between models based on your needs.
 
-| Model           | Size   | Pros                       | Cons                                   | Public Model |
-|-----------------|--------|----------------------------|----------------------------------------|--------------|
-| **TinyBERT**    | [57.1 MB](https://huggingface.co/atjsh/llmlingua-2-js-tinybert-meetingbank/blob/main/onnx/model.onnx)  | Very small,<br>fast        | Lower accuracy<br>than larger models   | [atjsh/llmlingua-2-js-tinybert-meetingbank](https://huggingface.co/atjsh/llmlingua-2-js-tinybert-meetingbank) |
-| **MobileBERT**  | [99.2 MB](https://huggingface.co/atjsh/llmlingua-2-js-mobilebert-meetingbank/blob/main/onnx/model.onnx)  | Small,<br>optimized for mobile | Moderate accuracy,<br>tradeoff in depth | [atjsh/llmlingua-2-js-mobilebert-meetingbank](https://huggingface.co/atjsh/llmlingua-2-js-mobilebert-meetingbank) |
-| **BERT**        | [710 MB](https://huggingface.co/Arcoldd/llmlingua4j-bert-base-onnx/blob/main/model.onnx)   | Faster,<br>smaller size    | Lower accuracy<br>than XLM-RoBERTa     | [Arcoldd/llmlingua4j-bert-base-onnx](https://huggingface.co/Arcoldd/llmlingua4j-bert-base-onnx) |
-| **XLM-RoBERTa** | [2240 MB](https://huggingface.co/atjsh/llmlingua-2-js-xlm-roberta-large-meetingbank/blob/main/onnx/model.onnx_data)  | High accuracy              | Slower,<br>slightly larger in size     | [atjsh/llmlingua-2-js-xlm-roberta-large-meetingbank](https://huggingface.co/atjsh/llmlingua-2-js-xlm-roberta-large-meetingbank) |
+| Model           | Size                                                                                                                | Pros                           | Cons                                    | Public Model                                                                                                                    |
+| --------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------ | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| **TinyBERT**    | [57.1 MB](https://huggingface.co/atjsh/llmlingua-2-js-tinybert-meetingbank/blob/main/onnx/model.onnx)               | Very small,<br>fast            | Lower accuracy<br>than larger models    | [atjsh/llmlingua-2-js-tinybert-meetingbank](https://huggingface.co/atjsh/llmlingua-2-js-tinybert-meetingbank)                   |
+| **MobileBERT**  | [99.2 MB](https://huggingface.co/atjsh/llmlingua-2-js-mobilebert-meetingbank/blob/main/onnx/model.onnx)             | Small,<br>optimized for mobile | Moderate accuracy,<br>tradeoff in depth | [atjsh/llmlingua-2-js-mobilebert-meetingbank](https://huggingface.co/atjsh/llmlingua-2-js-mobilebert-meetingbank)               |
+| **BERT**        | [710 MB](https://huggingface.co/Arcoldd/llmlingua4j-bert-base-onnx/blob/main/model.onnx)                            | Faster,<br>smaller size        | Lower accuracy<br>than XLM-RoBERTa      | [Arcoldd/llmlingua4j-bert-base-onnx](https://huggingface.co/Arcoldd/llmlingua4j-bert-base-onnx)                                 |
+| **XLM-RoBERTa** | [2240 MB](https://huggingface.co/atjsh/llmlingua-2-js-xlm-roberta-large-meetingbank/blob/main/onnx/model.onnx_data) | High accuracy                  | Slower,<br>slightly larger in size      | [atjsh/llmlingua-2-js-xlm-roberta-large-meetingbank](https://huggingface.co/atjsh/llmlingua-2-js-xlm-roberta-large-meetingbank) |
 
 [Learn More](https://llmlingua.com/llmlingua2.html#:~:text=our%20classification%20model.-,Performance,-We%20evaluate%20LLMLingua) about the performance of each model (actual performance may vary).
-
-The model files will be downloaded automatically by default.
 
 ## [API Reference](https://llmlingua-2-js-typedoc.vercel.app/modules/LLMLingua2.html)
 
 For more details on how to use the library, please refer to the [API reference documentation](https://llmlingua-2-js-typedoc.vercel.app/modules/LLMLingua2.html).
-
-# Testing
-
-> Unit tests are not available at the moment.
-
-E2E tests are partially available in following directories:
-
-- `examples/**`
 
 # License
 
