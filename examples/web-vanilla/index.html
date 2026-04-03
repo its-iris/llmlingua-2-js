@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LLMLingua-2 Demo</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Import Map -->
+    <script type="importmap">
+      {
+        "imports": {
+          "@its-iris/llmlingua-2": "https://esm.sh/gh/its-iris/llmlingua-2-js",
+          "@huggingface/transformers": "https://esm.sh/@huggingface/transformers@4.0.1"
+        }
+      }
+    </script>
+    <!-- Load App -->
+    <script type="module" src="./app.js"></script>
+
+    <style>
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background-color: #f3f4f6;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 min-h-screen p-4 md:p-8 text-gray-900">
+    <div class="max-w-7xl mx-auto space-y-6">
+      <header class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">
+          🤖🗜️ llmlingua-2-js
+        </h1>
+      </header>
+
+      <compressor-app></compressor-app>
+    </div>
+  </body>
+</html>

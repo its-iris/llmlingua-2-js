@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 
 import { AutoTokenizer } from "@huggingface/transformers";
-import { LLMLingua2 } from "../../../src/index.js";
-import { EXAMPLES } from "../long-texts.js";
+import { LLMLingua2 } from "../../src/index.js";
+import { EXAMPLES } from "./long-texts.js";
 
 // Xenova/gpt-4o is the Hugging Face equivalent of OpenAI's tiktoken with o200k_base.
 // You can also use tiktoken or js-tiktoken directly here, but HF tokenizers are relatively fast since 4.0
