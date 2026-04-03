@@ -529,27 +529,20 @@ export class PromptCompressorLLMLingua2 {
         padding: true,
         truncation: true,
       });
-
       this.logger("input tokenization finished");
 
       const outputs = await this.model({
         input_ids,
         attention_mask,
       });
-
       this.logger("model inference finished");
 
       const [batch_size, seq_len, num_classes] = outputs.logits.dims;
-
       this.logger("logits shape:", outputs.logits.dims);
 
       for (let j = 0; j < batch_size; j++) {
-        const chunk_ids = input_ids[j] as Tensor;
-        const chunk_mask = attention_mask[j] as Tensor;
-
-        const chunk_mask_number_array = Array.from(chunk_mask.data, (v) =>
-          Number(v)
-        );
+        const chunk_ids = (input_ids[j] as Tensor).data as BigInt64Array;
+        const chunk_mask = (attention_mask[j] as Tensor).data as BigInt64Array;
 
         const chunk_probs_class1 = Array.from({ length: seq_len }, (_, i) => {
           const startIdx = (j * seq_len + i) * num_classes;
@@ -558,11 +551,11 @@ export class PromptCompressorLLMLingua2 {
         });
 
         const active_probs = chunk_probs_class1
-          .filter((_, i) => chunk_mask_number_array[i] > 0);
+          .filter((_, i) => chunk_mask[i] > 0);
 
-        const active_ids = chunk_ids.data
-          .filter((_: bigint, i: number) => chunk_mask_number_array[i] > 0n)
-          .filter((v: bigint) => v !== 0n);
+        const active_ids = chunk_ids
+          .filter((_, i) => chunk_mask[i] > 0)
+          .filter((v) => v !== 0n);
 
         if (active_ids.length === 0) {
           compressed_chunk_strings_flat.push("");
@@ -573,11 +566,9 @@ export class PromptCompressorLLMLingua2 {
           new Tensor("int64", active_ids, [active_ids.length]).tolist()
         );
 
-        const token_prob_list = Array.from(active_probs);
-
         const { words, word_probs_with_force_logic } = this.mergeTokenToWord(
           token_list,
-          token_prob_list,
+          active_probs,
           force_tokens,
           token_map,
           force_reserve_digit

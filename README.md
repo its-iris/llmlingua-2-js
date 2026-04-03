@@ -41,7 +41,7 @@ You can use the library by installing it via a package manager using the GitHub 
 Install the dependencies and the library:
 
 ```sh
-npm install @huggingface/transformers^4.0.0 git://github.com/its-iris/llmlingua-2-js.git
+npm install @huggingface/transformers@4.0 git://github.com/its-iris/llmlingua-2-js.git
 ```
 
 ## Model Selection
