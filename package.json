@@ -13,7 +13,8 @@
     "clean": "rimraf dist",
     "build": "pnpm clean && tsc",
     "prepare": "pnpm build",
-    "preversion": "pnpm build"
+    "preversion": "pnpm build",
+    "lint": "eslint ."
   },
   "files": [
     "dist"
