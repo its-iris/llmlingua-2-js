@@ -300,7 +300,7 @@ export class PromptCompressorLLMLingua2 {
       chunk_end_tokens,
     } = options;
 
-    let token_map: Record<string, string> = {};
+    const token_map: Record<string, string> = {};
 
     for (let i = 0; i < force_tokens.length; i++) {
       const token = force_tokens[i];
@@ -427,8 +427,7 @@ export class PromptCompressorLLMLingua2 {
       let token = tokens[i];
       let prob = token_probs[i];
 
-      if (this.specialTokens.has(token)) {
-      } else if (
+      if (this.specialTokens.has(token)) { /* empty */ } else if (
         this.isBeginOfNewWord(token, force_tokens_original, token_map)
       ) {
         const pure_token = this.getPureToken(token);
@@ -508,9 +507,9 @@ export class PromptCompressorLLMLingua2 {
       token_to_word,
       force_tokens,
       token_map,
-      force_reserve_digit,
-      drop_consecutive,
+      force_reserve_digit
     } = options;
+    //TODO: drop_consecutive is not implemented
 
     if (reduce_rate <= 0) {
       return contexts;
@@ -562,8 +561,8 @@ export class PromptCompressorLLMLingua2 {
           .filter((_, i) => chunk_mask_number_array[i] > 0);
 
         const active_ids = chunk_ids.data
-          .filter((_, i) => chunk_mask_number_array[i] > 0n)
-          .filter((v) => v !== 0n);
+          .filter((_: bigint, i: number) => chunk_mask_number_array[i] > 0n)
+          .filter((v: bigint) => v !== 0n);
 
         if (active_ids.length === 0) {
           compressed_chunk_strings_flat.push("");

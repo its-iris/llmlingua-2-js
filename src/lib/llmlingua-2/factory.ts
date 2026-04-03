@@ -53,7 +53,7 @@ async function prepareDependencies(
 
   // Override defaultConfig if user provided a config for tokenizer or model
   // Always override transformers.js_config with transformersJSConfig
-  const buildOpts = (opts?: any) => ({
+  const buildOpts = (opts?: PretrainedModelOptions | PreTrainedTokenizerOptions) => ({
     ...opts,
     config: {
       ...(opts?.config || defaultConfig),
@@ -106,12 +106,12 @@ export interface LLMLingua2FactoryOptions {
    * Optional pretrained tokenizer options.
    * This does not refer to the oaiTokenizer!
    */
-  tokenizerOptions?: PreTrainedTokenizerOptions | null;
+  tokenizerOptions?: PreTrainedTokenizerOptions
 
   /**
    * Optional model-specific options.
    */
-  modelOptions?: PretrainedModelOptions | null;
+  modelOptions?: PretrainedModelOptions;
 
   /**
    * Optional logger function.

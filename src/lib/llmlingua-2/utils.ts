@@ -26,7 +26,7 @@ export const DEFAULT_LOGGER = (...message: unknown[]) =>
   console.log("[llmlingua-2-js]", ...message);
 
 // Equivalent to Python's string.punctuation
-const PUNCTUATION: string = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+const PUNCTUATION = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 
 /**
  * Implementation on `get_pure_token` function of original LLMLingua implementation.
@@ -184,7 +184,7 @@ export function chunk<T>(arr: T[], size: number): T[][] {
   }
   const chunkLength: number = Math.ceil(arr.length / size);
   const result: T[][] = Array(chunkLength);
-  for (let index: number = 0; index < chunkLength; index++) {
+  for (let index = 0; index < chunkLength; index++) {
     const start: number = index * size;
     const end: number = start + size;
     result[index] = arr.slice(start, end);
