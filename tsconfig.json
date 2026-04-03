@@ -1,21 +1,16 @@
 {
   "compilerOptions": {
     "target": "es2023",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "module": "Node18",
+    "module": "nodenext",
     "rootDir": "./src",
-    "moduleResolution": "node16",
+    "moduleResolution": "nodenext",
     "sourceMap": true,
     "outDir": "./dist",
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strictPropertyInitialization": false,
     "strict": true,
     "skipLibCheck": true,
     "declarationMap": true,
-    "declaration": true,
-    "noImplicitAny": false
+    "declaration": true
   },
-  "exclude": ["node_modules", "dist", "examples", "docs"]
+  "include": ["src/**/*"]
 }
