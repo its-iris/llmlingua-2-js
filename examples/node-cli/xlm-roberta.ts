@@ -22,12 +22,9 @@ const { promptCompressor } = await LLMLingua2.WithXLMRoBERTa(modelName, {
 
 const start = performance.now();
 
-const result = await promptCompressor.compress_prompt(
-  EXAMPLES[EXAMPLES.length - 1],
-  {
-    rate: 0.5,
-  },
-);
+const result = await promptCompressor.compress(EXAMPLES[EXAMPLES.length - 1], {
+  rate: 0.5,
+});
 
 const end = performance.now();
 

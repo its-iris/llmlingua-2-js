@@ -86,69 +86,6 @@ export interface CompressPromptOptions {
 }
 
 /**
- * Options for compressing prompts.
- *
- * @category Core
- */
-export interface CompressPromptOptionsSnakeCase {
-  /**
-   * Float value between 0 and 1 indicating the rate of compression.
-   * 0.1 means 10% of the original tokens will be kept
-   *
-   * @group Events
-   */
-  rate: number;
-
-  /**
-   * Target number of tokens to keep after compression.
-   * If set, this will override the `rate` option.
-   *
-   * @defaultValue `-1` (no target)
-   */
-  target_token?: number;
-
-  /**
-   * How to convert token probabilities to word probabilities.
-   * "mean" will average the probabilities of tokens in a word,
-   * "first" will take the probability of the first token in a word.
-   *
-   * @defaultValue `"mean"`
-   */
-  token_to_Word?: "mean" | "first";
-
-  /**
-   * List of tokens that must be kept in the compressed prompt.
-   * These tokens will not be removed regardless of their probability.
-   *
-   * @defaultValue `[]`
-   */
-  force_tokens?: string[];
-
-  /**
-   * If true, reserve a digit for forced tokens.
-   *
-   * @defaultValue `false`
-   */
-  force_reserve_digit?: boolean;
-
-  /**
-   * If true, drop consecutive tokens that are forced.
-   * This is useful to avoid keeping too many forced tokens in a row.
-   *
-   * @alpha
-   * @defaultValue `false`
-   */
-  drop_consecutive?: boolean;
-
-  /**
-   * List of tokens that indicate the end of a chunk.
-   * The context will be split into chunks at these tokens.
-   * @defaultValue `[".", "\n"]`
-   */
-  chunk_end_tokens?: string[];
-}
-
-/**
  * Configuration for LLMLingua-2 internals.
  *
  * @category Core
@@ -175,17 +112,6 @@ const DEFAULT_LLMLINGUA2_CONFIG: LLMLingua2Config = {
   max_force_token: 100,
   max_seq_length: 512,
 };
-
-interface CompressSingleContextOptions {
-  context: string;
-  rate: number;
-  target_token: number;
-  token_to_word: "mean" | "first";
-  force_tokens: string[];
-  force_reserve_digit: boolean;
-  drop_consecutive: boolean;
-  chunk_end_tokens: string[];
-}
 
 /**
  * The TypeScript implementation on original `PromptCompressor`, which is a class for compressing prompts using a language model.
@@ -252,58 +178,14 @@ export class PromptCompressorLLMLingua2 {
     context: string,
     {
       rate,
-      targetToken = -1,
-      tokenToWord = "mean",
-      forceTokens = [],
-      forceReserveDigit = false,
-      dropConsecutive = false,
-      chunkEndTokens = [".", "\n"],
+      targetToken: target_token = -1,
+      tokenToWord: token_to_word = "mean",
+      forceTokens: force_tokens = [],
+      forceReserveDigit: force_reserve_digit = false,
+      dropConsecutive: drop_consecutive = false,
+      chunkEndTokens: chunk_end_tokens = [".", "\n"],
     }: CompressPromptOptions
   ): Promise<string> {
-    return this.compressSingleContext({
-      context,
-      rate,
-      target_token: targetToken,
-      token_to_word: tokenToWord,
-      force_tokens: forceTokens,
-      force_reserve_digit: forceReserveDigit,
-      drop_consecutive: dropConsecutive,
-      chunk_end_tokens: chunkEndTokens,
-    });
-  }
-
-  /**
-   * Compresses a prompt based on the given options. Alias for `compress`, but uses snake_case for options.
-   *
-   * @alias compress
-   */
-  public async compress_prompt(
-    context: string,
-    options: CompressPromptOptionsSnakeCase
-  ) {
-    return this.compress(context, {
-      rate: options.rate,
-      targetToken: options.target_token,
-      tokenToWord: options.token_to_Word,
-      forceTokens: options.force_tokens,
-      forceReserveDigit: options.force_reserve_digit,
-      dropConsecutive: options.drop_consecutive,
-      chunkEndTokens: options.chunk_end_tokens,
-    });
-  }
-
-  private async compressSingleContext(options: CompressSingleContextOptions) {
-    let { context } = options;
-    const {
-      rate,
-      target_token,
-      token_to_word,
-      force_tokens,
-      force_reserve_digit,
-      drop_consecutive,
-      chunk_end_tokens,
-    } = options;
-
     const token_map: Record<string, string> = {};
 
     for (let i = 0; i < force_tokens.length; i++) {

@@ -181,7 +181,7 @@ const { promptCompressor } = await LLMLingua2.WithXLMRoBERTa(modelName,
   }
 );
 
-const compressedText: string = await promptCompressor.compress_prompt(
+const compressedText: string = await promptCompressor.compress(
   "LLMLingua-2, a small-size yet powerful prompt compression method trained via data distillation from GPT-4 for token classification with a BERT-level encoder, excels in task-agnostic compression. It surpasses LLMLingua in handling out-of-domain data, offering 3x-6x faster performance.",
   { rate: 0.8 }
 );
@@ -243,7 +243,7 @@ const { promptCompressor } = await LLMLingua2.WithBERTMultilingual(modelName,
   }
 );
 
-const compressedText: string = await promptCompressor.compress_prompt(
+const compressedText: string = await promptCompressor.compress(
   "LLMLingua-2, a small-size yet powerful prompt compression method trained via data distillation from GPT-4 for token classification with a BERT-level encoder, excels in task-agnostic compression. It surpasses LLMLingua in handling out-of-domain data, offering 3x-6x faster performance.",
   { rate: 0.8 }
 );
