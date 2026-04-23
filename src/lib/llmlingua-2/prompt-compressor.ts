@@ -148,6 +148,34 @@ export interface CompressPromptOptionsSnakeCase {
   chunk_end_tokens?: string[];
 }
 
+/**
+ * Configuration for LLMLingua-2 internals.
+ *
+ * @category Core
+ */
+export interface LLMLingua2Config {
+  /**
+   * Maximum batch size for processing prompts.
+   */
+  max_batch_size: number;
+
+  /**
+   * Maximum number of tokens to force in the compression.
+   */
+  max_force_token: number;
+
+  /**
+   * Maximum sequence length for the model.
+   */
+  max_seq_length: number;
+}
+
+const DEFAULT_LLMLINGUA2_CONFIG: LLMLingua2Config = {
+  max_batch_size: 50,
+  max_force_token: 100,
+  max_seq_length: 512,
+};
+
 interface CompressSingleContextOptions {
   context: string;
   rate: number;
@@ -201,25 +229,7 @@ export class PromptCompressorLLMLingua2 {
     /**
      * Configuration for LLMLingua2.
      */
-    private readonly llmlingua2Config = {
-      /**
-       * Maximum batch size for processing prompts.
-       * This is used to limit the number of prompts processed in a single batch.
-       */
-      max_batch_size: 50,
-
-      /**
-       * Maximum number of tokens to force in the compression.
-       * This is used to ensure that certain tokens are always included in the compressed prompt.
-       */
-      max_force_token: 100,
-
-      /**
-       * Maximum sequence length for the model.
-       * This is used to limit the length of the input sequences to the model.
-       */
-      max_seq_length: 512,
-    },
+    private readonly llmlingua2Config: LLMLingua2Config = DEFAULT_LLMLINGUA2_CONFIG,
 
     /**
      * Logger function to log messages.

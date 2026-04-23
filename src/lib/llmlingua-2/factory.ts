@@ -13,7 +13,10 @@ import {
   AutoTokenizer,
   PretrainedConfig,
 } from "@huggingface/transformers";
-import { PromptCompressorLLMLingua2 } from "./prompt-compressor.js";
+import {
+  LLMLingua2Config,
+  PromptCompressorLLMLingua2,
+} from "./prompt-compressor.js";
 import {
   get_pure_tokens_bert_base_multilingual_cased,
   get_pure_tokens_xlm_roberta_large,
@@ -53,7 +56,9 @@ async function prepareDependencies(
 
   // Override defaultConfig if user provided a config for tokenizer or model
   // Always override transformers.js_config with transformersJSConfig
-  const buildOpts = (opts?: PretrainedModelOptions | PreTrainedTokenizerOptions) => ({
+  const buildOpts = (
+    opts?: PretrainedModelOptions | PreTrainedTokenizerOptions,
+  ) => ({
     ...opts,
     config: {
       ...(opts?.config || defaultConfig),
@@ -103,10 +108,15 @@ export interface LLMLingua2FactoryOptions {
   oaiTokenizer: { encode: (text: string) => { length: number } };
 
   /**
+   * Optional LLMLingua-2 configuration.
+   */
+  llmlingua2Config?: LLMLingua2Config;
+
+  /**
    * Optional pretrained tokenizer options.
    * This does not refer to the oaiTokenizer!
    */
-  tokenizerOptions?: PreTrainedTokenizerOptions
+  tokenizerOptions?: PreTrainedTokenizerOptions;
 
   /**
    * Optional model-specific options.
@@ -183,7 +193,7 @@ export async function WithXLMRoBERTa(
   modelName: string,
   options: LLMLingua2FactoryOptions,
 ): Promise<LLMLingua2FactoryReturn> {
-  const { oaiTokenizer, logger = DEFAULT_LOGGER } = options;
+  const { oaiTokenizer, llmlingua2Config, logger = DEFAULT_LOGGER } = options;
 
   const { model, tokenizer } = await prepareDependencies(modelName, options);
 
@@ -193,7 +203,7 @@ export async function WithXLMRoBERTa(
     get_pure_tokens_xlm_roberta_large,
     is_begin_of_new_word_xlm_roberta_large,
     oaiTokenizer,
-    undefined,
+    llmlingua2Config,
     logger,
   );
   logger({ promptCompressor });
@@ -245,7 +255,7 @@ export async function WithBERTMultilingual(
   modelName: string,
   options: LLMLingua2FactoryOptions,
 ): Promise<LLMLingua2FactoryReturn> {
-  const { oaiTokenizer, logger = DEFAULT_LOGGER } = options;
+  const { oaiTokenizer, llmlingua2Config, logger = DEFAULT_LOGGER } = options;
 
   const { model, tokenizer } = await prepareDependencies(modelName, options);
 
@@ -255,7 +265,7 @@ export async function WithBERTMultilingual(
     get_pure_tokens_bert_base_multilingual_cased,
     is_begin_of_new_word_bert_base_multilingual_cased,
     oaiTokenizer,
-    undefined,
+    llmlingua2Config,
     logger,
   );
   logger({ promptCompressor });
