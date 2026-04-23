@@ -10,8 +10,8 @@ export const LLMLingua2CompressorModels = {
     },
     llmlingua2Config: {
       maxBatchSize: 50,
-      maxForceTokens: 100,
-      maxSequenceLength: 312,
+      maxForceToken: 100,
+      maxSeqLen: 312,
     },
     factory: LLMLingua2.WithBERTMultilingual,
   },
@@ -23,8 +23,8 @@ export const LLMLingua2CompressorModels = {
     },
     llmlingua2Config: {
       maxBatchSize: 50,
-      maxForceTokens: 100,
-      maxSequenceLength: 128,
+      maxForceToken: 100,
+      maxSeqLen: 128,
     },
     factory: LLMLingua2.WithBERTMultilingual,
   },

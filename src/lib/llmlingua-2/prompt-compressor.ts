@@ -94,23 +94,23 @@ export interface LLMLingua2Config {
   /**
    * Maximum batch size for processing prompts.
    */
-  max_batch_size: number;
+  maxBatchSize: number;
 
   /**
    * Maximum number of tokens to force in the compression.
    */
-  max_force_token: number;
+  maxForceToken: number;
 
   /**
    * Maximum sequence length for the model.
    */
-  max_seq_length: number;
+  maxSeqLen: number;
 }
 
 const DEFAULT_LLMLINGUA2_CONFIG: LLMLingua2Config = {
-  max_batch_size: 50,
-  max_force_token: 100,
-  max_seq_length: 512,
+  maxBatchSize: 50,
+  maxForceToken: 100,
+  maxSeqLen: 512,
 };
 
 /**
@@ -162,7 +162,7 @@ export class PromptCompressorLLMLingua2 {
      */
     private readonly logger: Logger = DEFAULT_LOGGER
   ) {
-    for (let i = 0; i < this.llmlingua2Config.max_force_token; i++) {
+    for (let i = 0; i < this.llmlingua2Config.maxForceToken; i++) {
       this.addedTokens.push(`[NEW${i}]`);
     }
 
@@ -253,7 +253,7 @@ export class PromptCompressorLLMLingua2 {
     originText: string,
     chunkEndTokens: Set<string>
   ): string[] {
-    const maxLenTokens = this.llmlingua2Config.max_seq_length - 2;
+    const maxLenTokens = this.llmlingua2Config.maxSeqLen - 2;
     const origin_list: string[] = [];
     const origin_tokens = this.tokenizer.tokenize(originText);
     const n = origin_tokens.length;
@@ -407,7 +407,7 @@ export class PromptCompressorLLMLingua2 {
 
     const chunked_contexts = chunk(
       contexts,
-      this.llmlingua2Config.max_batch_size
+      this.llmlingua2Config.maxBatchSize
     );
 
     for (const context of chunked_contexts) {
