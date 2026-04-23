@@ -6,8 +6,7 @@
   "out": "docs",
   "navigationLinks": {
     "GitHub": "https://github.com/its-iris/llmlingua-2-js",
-    "Documentation": "https://llmlingua-2-js-typedoc.vercel.app",
-    "Demo": "https://atjsh.github.io/llmlingua-2-js"
+    "Demo": "https://its-iris.github.io/llmlingua-2-js"
   },
   "navigation": {
     "includeCategories": true,
