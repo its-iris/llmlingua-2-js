@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: MIT
 
 export { PromptCompressorLLMLingua2 as PromptCompressor } from "./prompt-compressor.js";
-export type { CompressPromptOptions } from "./prompt-compressor.js";
+export type {
+  CompressPromptOptions,
+  LLMLingua2Config,
+} from "./prompt-compressor.js";
 export {
   get_pure_tokens_bert_base_multilingual_cased,
   get_pure_tokens_xlm_roberta_large,
@@ -11,6 +14,7 @@ export {
 export type {
   GetPureTokenFunction,
   IsBeginOfNewWordFunction,
+  Logger,
 } from "./utils.js";
 export { WithXLMRoBERTa, WithBERTMultilingual } from "./factory.js";
 export type {
