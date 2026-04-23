@@ -11,6 +11,7 @@ import {
   AutoConfig,
   AutoModelForTokenClassification,
   AutoTokenizer,
+  MobileBertPreTrainedModel,
   PretrainedConfig,
 } from "@huggingface/transformers";
 import {
@@ -80,10 +81,13 @@ async function prepareDependencies(
   // Load the models asynchronously
   const [tokenizer, model] = await Promise.all([
     AutoTokenizer.from_pretrained(modelName, finalTokenizerOptions),
-    AutoModelForTokenClassification.from_pretrained(
-      modelName,
-      finalModelOptions,
-    ),
+    // Exception for mobilebert as Transformers.js does not define token classifier model for mobilebert
+    finalModelOptions.config.model_type === "mobilebert"
+      ? MobileBertPreTrainedModel.from_pretrained(modelName, finalModelOptions)
+      : AutoModelForTokenClassification.from_pretrained(
+          modelName,
+          finalModelOptions,
+        ),
   ]);
   logger({ tokenizer, model });
 
