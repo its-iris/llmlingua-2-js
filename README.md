@@ -1,6 +1,5 @@
 # JavaScript/TypeScript Implementation of LLMLingua-2 (Experimental)
 
-[![NPM Version](https://img.shields.io/npm/v/%40atjsh%2Fllmlingua-2)](https://www.npmjs.com/package/@atjsh/llmlingua-2)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 **LLMLingua-2**, Originally developed and implemented in Python by [Microsoft](https://github.com/microsoft/LLMLingua), is a small-size yet powerful prompt compression method.
@@ -8,7 +7,7 @@
 - **Efficient**: Compresses context prompts with BERT sized models.
 - **Accurate**: Achieves high accuracy then other methods while requiring less computational resources.
 
-**llmlingua-2-js**, ported by [atjsh](https://github.com/atjsh), is a pure JavaScript/TypeScript implementation of LLMLingua-2, designed to run in web browsers and Node.js environments.
+**llmlingua-2-js**, ported by [atjsh](https://github.com/atjsh) and maintained by [its-iris](https://github.com/its-iris), is a pure JavaScript/TypeScript implementation of LLMLingua-2, designed to run in web browsers and Node.js environments.
 
 - **Performance**: Everything can be done in the browser. If your environment supports WebGPU, you can use it. Server-side processing is not required by default.
 - **Correctness**: The original logic will be ported to TypeScript as accurately as possible.
@@ -44,9 +43,9 @@ You can choose between models based on your needs.
 
 [Learn More](https://llmlingua.com/llmlingua2.html#:~:text=our%20classification%20model.-,Performance,-We%20evaluate%20LLMLingua) about the performance of each model (actual performance may vary).
 
-## [API Reference](https://llmlingua-2-js-typedoc.vercel.app/modules/LLMLingua2.html)
+## [API Reference](https://its-iris.github.io/llmlingua-2-js/docs)
 
-For more details on how to use the library, please refer to the [API reference documentation](https://llmlingua-2-js-typedoc.vercel.app/modules/LLMLingua2.html).
+For more details on how to use the library, please refer to the [API reference documentation](https://its-iris.github.io/llmlingua-2-js/docs).
 
 # License
 
