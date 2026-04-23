@@ -19,15 +19,25 @@ class CompressorApp extends HTMLElement {
                     </div>
 
                     <div class="space-y-2">
-                        <label class="block text-sm font-medium" for="rate">Target Compression Rate: <span id="rate-value">0.5</span></label>
-                        <input id="rate" type="range" min="0.1" max="1.0" step="0.1" value="0.5" class="w-full">
+                      <label class="block text-sm font-medium" for="rate">Target Compression Rate: <span id="rate-value">0.50</span></label>
+                      <input id="rate" type="range" min="0.1" max="1.0" step="0.01" value="0.5" class="w-full">
                     </div>
 
                     <button id="compress-btn" class="w-full mt-4 bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded font-medium disabled:opacity-50">
                         Compress Text
                     </button>
-                    
+
                     <div id="status" class="text-sm mt-2 text-gray-500 font-mono text-center">Ready</div>
+
+                    <div id="download-progress" class="mt-3 opacity-0 max-h-0 overflow-hidden transition-all duration-300">
+                      <div class="flex justify-between text-xs text-gray-600 mb-1">
+                        <span>Downloading model</span>
+                        <span id="download-progress-value"></span>
+                      </div>
+                      <div class="w-full h-2 bg-gray-200 rounded overflow-hidden">
+                        <div id="download-progress-bar" class="h-full bg-indigo-500 transition-all duration-150" style="width: 0%"></div>
+                      </div>
+                    </div>
                 </div>
 
                 <!-- I/O Panel -->
@@ -59,6 +69,9 @@ class CompressorApp extends HTMLElement {
     this.rateSlider = this.querySelector("#rate");
     this.rateValue = this.querySelector("#rate-value");
     this.modelSelect = this.querySelector("#model-select");
+    this.downloadProgress = this.querySelector("#download-progress");
+    this.downloadProgressBar = this.querySelector("#download-progress-bar");
+    this.downloadProgressValue = this.querySelector("#download-progress-value");
 
     // Input listeners
     this.originalText.addEventListener("input", (e) => {
@@ -66,8 +79,8 @@ class CompressorApp extends HTMLElement {
         `${e.target.value.length} chars`;
     });
 
-    this.rateSlider.addEventListener("input", (e) => {
-      this.rateValue.textContent = e.target.value;
+    this.rateSlider.addEventListener("input", ({ target }) => {
+      this.rateValue.textContent = Number(target.value).toFixed(2);
     });
 
     this.modelSelect.addEventListener("change", () => {
@@ -79,17 +92,34 @@ class CompressorApp extends HTMLElement {
     this.btn.addEventListener("click", async () => await this.compress());
   }
 
+  setDownloadProgress(value) {
+    const isVisible = Number.isFinite(value);
+    this.downloadProgress.classList.toggle("opacity-100", isVisible);
+    this.downloadProgress.classList.toggle("max-h-12", isVisible);
+    this.downloadProgress.classList.toggle("opacity-0", !isVisible);
+    this.downloadProgress.classList.toggle("max-h-0", !isVisible);
+
+    if (isVisible) {
+      this.downloadProgressValue.textContent =
+        this.downloadProgressBar.style.width = `${value.toFixed(1)}%`;
+    }
+  }
+
   async initModel() {
     if (!this.compressor) {
       this.btn.disabled = true;
-      this.statusEl.textContent =
-        "Loading Model (this takes a while on first run)...";
+      this.statusEl.textContent = "Loading Model...";
       try {
         const modelKey = this.modelSelect.value;
-        this.compressor = await createCompressor(modelKey);
+        this.compressor = await createCompressor(modelKey, {
+          onProgress: ({ status, progress }) =>
+            status === "progress_total" && this.setDownloadProgress(progress),
+        });
+        this.setDownloadProgress(null);
         this.statusEl.textContent = "Model Loaded.";
       } catch (err) {
         console.error(err);
+        this.setDownloadProgress(null);
         this.statusEl.textContent = "Error loading model. Check console.";
         return false;
       } finally {

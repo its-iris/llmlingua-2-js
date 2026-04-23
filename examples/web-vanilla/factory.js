@@ -48,7 +48,8 @@ export const LLMLingua2CompressorModels = {
   },
 };
 
-export async function createCompressor(modelKey) {
+export async function createCompressor(modelKey, { onProgress } = {}) {
+  const progress_callback = onProgress ? (info) => onProgress(info) : undefined;
   const oai_tokenizer = await AutoTokenizer.from_pretrained("Xenova/gpt-4o");
   const modelConfig = LLMLingua2CompressorModels[modelKey];
   if (!modelConfig) {
@@ -60,7 +61,14 @@ export async function createCompressor(modelKey) {
     {
       transformersJSConfig: modelConfig.transformersJSConfig,
       oaiTokenizer: oai_tokenizer,
-      modelOptions: modelConfig.modelOptions,
+      tokenizerOptions: {
+        ...modelConfig.modelOptions,
+        progress_callback,
+      },
+      modelOptions: {
+        ...modelConfig.modelOptions,
+        progress_callback,
+      },
       llmlingua2Config: modelConfig.llmlingua2Config,
     },
   );
