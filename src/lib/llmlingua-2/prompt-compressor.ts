@@ -230,15 +230,9 @@ export class PromptCompressorLLMLingua2 {
       this.addedTokens.push(`[NEW${i}]`);
     }
 
-    const specialTokensMap = this.tokenizer.all_special_tokens || {};
-
-    this.specialTokens = new Set<string>();
-
-    for (const [key, value] of Object.entries(specialTokensMap)) {
-      if (key !== "additional_special_tokens") {
-        this.specialTokens.add(value);
-      }
-    }
+    // Make sure this excludes additional_special_tokens
+    // which does not yet exist in tokenizers.js as of time of writing
+    this.specialTokens = new Set<string>(this.tokenizer.all_special_tokens);
   }
 
   /**
@@ -525,7 +519,7 @@ export class PromptCompressorLLMLingua2 {
     );
 
     for (const context of chunked_contexts) {
-      const { input_ids, attention_mask } = await this.tokenizer(context, {
+      const { input_ids, attention_mask } = this.tokenizer(context, {
         padding: true,
         truncation: true,
       });
@@ -537,16 +531,15 @@ export class PromptCompressorLLMLingua2 {
       });
       this.logger("model inference finished");
 
-      const [batch_size, seq_len, num_classes] = outputs.logits.dims;
+      const [batch_size, seq_len] = outputs.logits.dims;
       this.logger("logits shape:", outputs.logits.dims);
 
       for (let j = 0; j < batch_size; j++) {
-        const chunk_ids = (input_ids[j] as Tensor).data as BigInt64Array;
-        const chunk_mask = (attention_mask[j] as Tensor).data as BigInt64Array;
+        const chunk_ids = input_ids.slice(j).data as BigInt64Array;
+        const chunk_mask = attention_mask.slice(j).data as BigInt64Array;
 
         const chunk_probs_class1 = Array.from({ length: seq_len }, (_, i) => {
-          const startIdx = (j * seq_len + i) * num_classes;
-          const token_logits = Array.from(outputs.logits.data.slice(startIdx, startIdx + num_classes)) as number[];
+          const token_logits = outputs.logits.slice(j, i).data as Float32Array;
           return softmax(token_logits)[1];
         });
 
