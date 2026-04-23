@@ -40,10 +40,9 @@ export const LLMLingua2CompressorModels = {
   ROBERTA: {
     modelName: "atjsh/llmlingua-2-js-xlm-roberta-large-meetingbank",
     transformersJSConfig: {
-      device: "gpu",
+      device: "auto",
       dtype: "int8",
     },
-    modelOptions: { use_external_data_format: true },
     factory: LLMLingua2.WithXLMRoBERTa,
   },
 };

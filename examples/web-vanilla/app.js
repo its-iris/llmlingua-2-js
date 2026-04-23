@@ -131,19 +131,25 @@ class CompressorApp extends HTMLElement {
 
   async compress() {
     this.btn.disabled = true;
-    this.statusEl.textContent = "Compressing...";
 
     const isLoaded = await this.initModel();
     if (!isLoaded) return;
 
+    this.statusEl.textContent = "Compressing...";
+    // Yield to event loop to allow render
+    await new Promise((r) => setTimeout(r, 10));
+
     try {
       const textToCompress = this.originalText.value;
+      const start = performance.now();
       const result = await this.compressor.compress(textToCompress, {
         rate: parseFloat(this.rateSlider.value),
       });
+      const end = performance.now();
+      const timeMs = Math.round(end - start);
       this.compressedText.value = result;
       this.querySelector("#compressed-count").textContent =
-        `${result.length} chars (Saved ${textToCompress.length - result.length})`;
+        `${result.length} chars (Saved ${textToCompress.length - result.length}, took ${timeMs}ms)`;
       this.statusEl.textContent = "Done.";
     } catch (err) {
       console.error(err);
